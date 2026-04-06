@@ -1,13 +1,13 @@
 import express from 'express';
-import { createEvent, getUserEvents, getEventsById, updateEvent, deleteEvent,getAllEvents } from '../../controllers/event.js';
+import { createEvent, getUserEvents, getEventsById, updateEvent, deleteEvent } from '../../controllers/event.js';
+import { validateEventData } from '../../middlewares/event.js';
 
 const router = express.Router();
 
-router.post('/', createEvent);
+router.post('/', validateEventData, createEvent);
 router.get('/', getUserEvents);
-router.get('/admin', getAllEvents);
 router.get('/:id', getEventsById);
-router.put('/:id', updateEvent);
+router.put('/:id', validateEventData, updateEvent);
 router.delete('/:id', deleteEvent);
 
 export default router;

@@ -67,9 +67,13 @@ async function loginUser(req, res) {
 
 async function logoutUser(req, res) {
   try {
+
     return res.clearCookie('token', { secure: true, sameSite: 'strict' }).status(200).json({ message: 'Logged out successfully' });
+
   } catch (error) {
+
     return res.status(500).json({ error: 'Failed to logout user' });
+
   }
 }
 
@@ -77,21 +81,43 @@ async function getUserByToken(req, res) {
   try {
     const token = req.cookies?.token;
 
-    if (!token) {
-      return res.status(401).json({ error: 'Unauthorized' });
-    }
-
     const user = jwt.verify(token, JWT_SECRET_KEY);
+
     const userData = await User.findById(user.userId);
+
     if (!userData) {
       return res.status(404).json({ error: 'User not found' });
     }
 
     const {password: _, ...userWithoutPassword} = userData.toObject();
+
     return res.status(200).json(userWithoutPassword);
+
   } catch (error) {
+
     return res.status(500).json({ error: 'Failed to fetch user' });
+
   }
 } 
 
-export { createUser, getUser, loginUser, logoutUser, getUserByToken };
+
+async function getAllUsers(req, res) {
+  try {
+
+    const limit = 10;
+    
+    const page  = req.params.page || 1;
+
+    const skip = (page - 1) * 10;
+
+    const users = await User.find().limit(limit).skip(skip);
+    return res.status(200).json(users);
+
+  } catch (error) {
+
+    return res.status(500).json({ error: 'Failed to fetch events' });
+  }
+
+};
+
+export { createUser, getUser, loginUser, logoutUser, getUserByToken, getAllUsers };
