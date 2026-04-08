@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken';
+import { JWT_SECRET_KEY } from '../config/server.js';
 
 function isLoggedIn(req, res, next) {
     const token = req.cookies?.token;

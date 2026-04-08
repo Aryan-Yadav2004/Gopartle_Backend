@@ -9,15 +9,15 @@ function validateEventData(req, res, next) {
 
     let validatedEventData = {};
 
-    if(eventData.hiringCategory === 'Planner' || eventData.plannerDetails || eventData.plannerDetails.servicesRequired || eventData.plannerDetails.estimatedBudget || eventData.plannerDetails.guestCount) {
+    if(eventData.hiringCategory === 'Planner' && eventData.plannerDetails && (eventData.plannerDetails.servicesRequired || eventData.plannerDetails.estimatedBudget || eventData.plannerDetails.guestCount)) {
 
       validatedEventData = {...eventData, performerDetails: {}, crewDetails: {}};
 
-    } else if(eventData.hiringCategory === 'Performer' || eventData.performerDetails || eventData.performerDetails.actType || eventData.performerDetails.durationNeeded || eventData.performerDetails.estimatedBudget ) {
+    } else if(eventData.hiringCategory === 'Performer' && eventData.performerDetails && (eventData.performerDetails.actType || eventData.performerDetails.durationNeeded || eventData.performerDetails.estimatedBudget )) {
 
       validatedEventData = {...eventData, plannerDetails: {}, crewDetails: {}};
 
-    } else if(eventData.hiringCategory === 'Crew' || eventData.crewDetails || eventData.crewDetails.crewRole || eventData.crewDetails.shiftHours || eventData.crewDetails.estimatedBudget || eventData.crewDetails.estimatedNumberOfCrew) {
+    } else if(eventData.hiringCategory === 'Crew' && eventData.crewDetails && (eventData.crewDetails.crewRole || eventData.crewDetails.shiftHours || eventData.crewDetails.estimatedBudget || eventData.crewDetails.estimatedNumberOfCrew)) {
 
       validatedEventData = {...eventData, plannerDetails: {}, performerDetails: {}};
 

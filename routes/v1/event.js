@@ -4,10 +4,10 @@ import { validateEventData } from '../../middlewares/event.js';
 
 const router = express.Router();
 
-router.post('/', validateEventData, createEvent);
-router.get('/', getUserEvents);
-router.get('/:id', getEventsById);
-router.put('/:id', validateEventData, updateEvent);
-router.delete('/:id', deleteEvent);
+router.post('/', validateEventData, createEvent);//done
+router.get('/', getUserEvents);//done
+router.get('/:id', getEventsById);//done
+router.put('/:id', validateEventData, updateEvent);//done
+router.delete('/:id', deleteEvent);//done
 
 export default router;

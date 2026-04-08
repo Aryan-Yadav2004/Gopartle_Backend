@@ -10,6 +10,7 @@ async function createEvent(req, res) {
     const user = jwt.verify(token, JWT_SECRET_KEY);
     
     const eventData = req.body;
+    console.log('Received event data:', eventData);
 
     const newEvent = new Event({ ...eventData, createdBy: user.userId });
 
@@ -62,11 +63,17 @@ async function getUserEvents(req, res) {
 async function getEventsById(req, res) {
   try {
 
+    const token = req.cookies?.token;
+    const user = jwt.verify(token, JWT_SECRET_KEY);
+
     const eventId = req.params.id;
     const event = await Event.findById(eventId);
 
     if (!event) {
       return res.status(404).json({ error: 'Event not found' });
+    }
+    if (event.createdBy.toString() !== user.userId.toString() && user.role !== 'admin') {//ownership check
+      return res.status(403).json({ error: 'Forbidden' });
     }
 
     return res.status(200).json(event);
@@ -88,7 +95,7 @@ async function deleteEvent(req, res) {
       return res.status(404).json({ error: 'Event not found' });
     }
 
-    if (event.createdBy.toString() !== user.userId) {//ownership check
+    if (event.createdBy.toString() !== user.userId.toString() && user.role !== 'admin') {//ownership check
       return res.status(403).json({ error: 'Forbidden' });
     }
 
@@ -111,7 +118,7 @@ async function updateEvent(req, res) {
       return res.status(404).json({ error: 'Event not found' });
     }
 
-    if (event.createdBy.toString() !== user.userId) {//ownership check
+    if (event.createdBy.toString() !== user.userId.toString() && user.role !== 'admin') {//ownership check
       return res.status(403).json({ error: 'Forbidden' });
     }
 
@@ -130,11 +137,10 @@ async function getAllEvents(req, res) {
   try {
 
     const limit = 10;
-    
-    const page  = req.params.page || 1;
+    const page  = req.query.page || 1;
 
     const skip = (page - 1) * 10;
-
+    
     const events = await Event.find().limit(limit).skip(skip);
     return res.status(200).json(events);
 
