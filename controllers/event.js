@@ -2,7 +2,6 @@ import Event from "../models/event.js";
 import jwt from 'jsonwebtoken';
 import { JWT_SECRET_KEY } from '../config/server.js';
 
-
 async function createEvent(req, res) {
   try {
     const token = req.cookies?.token;
@@ -21,6 +20,7 @@ async function createEvent(req, res) {
   } catch (error) {
     return res.status(500).json({ error: 'Failed to create event' });
   }
+  
 };
 
 async function getEvent(req, res) {

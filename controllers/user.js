@@ -26,7 +26,7 @@ async function createUser(req, res) {
 async function getUser(req, res) {
   try {
     const userId = req.params.id;
-    // Logic to retrieve a user from the database
+    
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
